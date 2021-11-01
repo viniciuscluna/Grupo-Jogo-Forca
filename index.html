@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Sogolon">
+    <link rel="stylesheet" type="text/css" href="./index.css">
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <title>Hunger Man (Hangman) Game</title>
+</head>
+<body>
+    <header>
+        <h2 class="title">Hunger Man Game</h2>
+    </header>
+    <main>
+        <section id="wanna-play">
+            <h1 class="invitation">Hello! I Want to Play a Game!</h1>
+        </section>
+        <section id="play-button">
+            <div class="start">
+                <button id="button" onclick="start()">Let's start!</button>
+            </div>
+        </section>
+        <section id="word-sentence">
+            <div class="reveal">
+                <h2 class="background">The word is:</h2>
+                <h2 class="background" id="word"></h2>
+            </div>
+            <div class="style">
+                <h2 class="background" id="visual">You have 5 wrong attempts!</h2>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p class="developer">Developed by <a href="mailto:sogolonmvj@yahoo.com" class="colour" >Sogolon</a>.</p>
+    </footer>
+</body>
+<script>
+        let wordList = [];
+        let storedData = {};
+
+        if (localStorage.getItem("Again")) {
+            document.getElementById("button").innerHTML = JSON.parse(localStorage.getItem("Again"));
+        };
+
+        if (localStorage.getItem("Good word")) {
+            document.getElementById("word").innerHTML = JSON.parse(localStorage.getItem("Good word"));
+        };
+
+        if (localStorage.getItem("Sentence")) {
+            document.getElementById("visual").innerHTML = JSON.parse(localStorage.getItem("Sentence"));
+        };
+
+        function start() {
+
+            if (localStorage.getItem("Words")) {
+                storedData = JSON.parse(localStorage.getItem("Words"));
+                printData(storedData);
+                return;
+            };
+
+            fetch('https://cryptic-atoll-66299.herokuapp.com/https://gist.githubusercontent.com/Sogolonmvj/eeab3c6974fead12019a4d26963f226e/raw/2bca1921bb39815ff26fa6ab193238dc8a5b1201/wordlist.json', {headers: {origin: 'http://localhost:5500/'}})
+            .then(res => {
+                if(!res.ok) throw new Error('Error');
+                return res.json()
+            })
+            .then(data => {
+                localStorage.setItem('Words', JSON.stringify(data));
+                printData(data);
+            }) 
+            .catch(Error => console.log("Error:" + Error));
+
+        };
+        
+        const printData = (data) => {
+            data.words.map((word) => (
+                wordList.push(word.split(","))
+            ));
+            selectWord(wordList);
+        };
+
+        const selectWord = (wordList) => {
+            const random = Math.floor(Math.random() * wordList[0].length);
+            let chosenWord = [];
+            chosenWord.push(wordList[0][random]);
+            organizeWord(chosenWord);
+        };
+
+        const organizeWord = (chosenWord) => {
+            let arrayOfLetters = [];
+            arrayOfLetters.push(chosenWord.join(",").split(""));
+            arrayOfLetters = arrayOfLetters.join('').match(/[A-Za-z]/g);
+            processInput(arrayOfLetters);
+        };
+
+        const processInput = (arrayOfLetters) => {
+            let wrongAttempts = 0;
+            let counter = 0;
+            let rightAns = [];
+
+            console.log('*** arrayOfLetters', arrayOfLetters);
+
+            while (wrongAttempts < 5) {
+
+                let input;
+                
+                let enteredValue = prompt('Type a letter from the Latin alphabet:');
+
+                if (enteredValue.match(/[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]/g)) { 
+
+                    if (enteredValue.length === 1) {
+                        input = enteredValue.toLowerCase();
+                    } else {
+                        alert('Type only one letter at a time!');
+                    };
+
+                } else {
+                    alert('Only letters are permitted in this game!');
+                };
+
+               if (arrayOfLetters.includes(input)) {
+
+                    let temp = [];
+
+                    let index = arrayOfLetters.indexOf(input);
+                    while (index != -1) {
+                        temp.push(index);
+                        index = arrayOfLetters.indexOf(input, index + 1);
+                    };
+
+                    for (let i in temp) {
+                        rightAns[temp[i]] = input;
+                    };
+
+                    counter += temp.length;
+                    
+                    let guessingWord = [...rightAns];
+
+                    guessingWord = guessingWord.join('-');
+
+                    alert(`Congratulations, good letter! The word is ${guessingWord}.`);
+
+                    let goodAnswer = rightAns.join('').split(',');
+
+                    if (counter === arrayOfLetters.length) {
+                        localStorage.setItem('Good word', JSON.stringify(goodAnswer));
+
+                        document.getElementById("word").innerHTML = goodAnswer;
+
+                        let message = `Congratulations! You got it right!`;
+                        let play = 'Play again!'
+
+                        document.getElementById("visual").innerHTML = message;
+                        localStorage.setItem('Sentence', JSON.stringify(message));
+                        localStorage.setItem('Again', JSON.stringify(play));
+                        document.getElementById("button").innerHTML = play;
+                        break;
+                    }
+
+               } else {
+                   wrongAttempts++;
+
+                   if (wrongAttempts === 1) {
+                    alert(`Wrong letter! You lost the first leg! You have more ${5 - wrongAttempts} attempts!`);
+                   };
+
+                   if (wrongAttempts === 2) {
+                    alert(`Wrong letter! You lost the second leg! You have more ${5 - wrongAttempts} attempts!`);
+                   };
+
+                   if (wrongAttempts === 3) {
+                    alert(`Wrong letter! You lost an arm! You have more ${5 - wrongAttempts} attempts!`);
+                   };
+
+                   if (wrongAttempts === 4) {
+                    alert(`Wrong letter! You lost another arm! You have more ${5 - wrongAttempts} attempts!`);
+                   };
+
+                   if (wrongAttempts === 5) {
+                    let answer = arrayOfLetters.join('');
+                    localStorage.setItem('Good word', JSON.stringify(answer));
+
+                    document.getElementById("word").innerHTML = answer;
+
+                    let message = `You are dead, you lost your head!`;
+                    let play = 'Try again!'
+                    document.getElementById("visual").innerHTML = message;
+                    localStorage.setItem('Sentence', JSON.stringify(message));
+                    localStorage.setItem('Again', JSON.stringify(play));
+                    document.getElementById("button").innerHTML = play;
+                   };
+               };
+                
+            };
+
+        };
+
+</script>
+</html>

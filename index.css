@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url(./public/Billy.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+main {
+    min-height: 100vh;
+}
+
+.title, .invitation, .start {
+    display: flex;
+    justify-content: center;
+}
+
+header {
+    background-color: rgba(0,0,0,0.5);
+
+    height: 5vh;
+
+    display: flex;
+    justify-content: center;
+
+    align-items: center;
+}
+
+.invitation {
+    position: relative;
+    top: 3vh;
+}
+
+.start {
+    position: relative;
+    top: 25vh;
+}
+
+h1, h2, h3 {
+    color: red;
+}
+
+button {
+    background-color: red;
+    color: white;
+
+    border-radius: 8px;
+
+    height: 80px;
+    width: 320px;
+
+    font-weight: bold;
+    font-size: 40px;
+
+    cursor: pointer;
+
+    transition: background-color 0.5s ease-in-out;
+}
+
+button:hover {
+    background-color: #aa0201;
+}
+
+.reveal {
+    display: flex;
+    flex-direction: horizontal;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    top: 30vh;
+}
+
+.style {
+    display: flex;
+    justify-content: center;
+}
+
+.background {
+    background-color: rgba(0,0,0,0.5);
+}
+
+#word {
+    color:white;
+    margin-left: 10px;
+    width: fit-content;
+}
+
+#visual {
+    display: flex;
+    justify-content: center;
+
+    position: relative;
+    top: 34vh;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+
+    background-color: rgba(0,0,0,0.5);
+    height: 5vh;
+
+    align-items: center;
+}
+
+.developer {
+    color: red;
+}
+
+.colour {
+    color: white;
+    text-decoration: none;
+}
+
