@@ -1,12 +1,17 @@
 import { address } from './api.js';
 
 export class GetWord {
-    #character = 'Personagem:';
+    #character = 'Personagem: ';
+    #tip = 'Dica: ';
 
     constructor(id, word, tip) {
         this.id = id;
         this.word = word.toUpperCase();
         this.tip = tip;
+    };
+
+    get guessingTip() {
+        return this.#tip;
     };
 
     get sentence() {
@@ -15,6 +20,7 @@ export class GetWord {
 
     printData() {
         console.log(this.#character + this.word);
+        console.log(this.#tip + this.tip);
     };
 
 };
@@ -66,5 +72,3 @@ export const start = () => {
     };
 
 };
-
-start();
