@@ -1,16 +1,21 @@
 import { address } from './api.js';
 
 export class GetWord {
-    
+    #character = 'Personagem:';
+
     constructor(id, word, tip) {
         this.id = id;
-        this.word = word;
+        this.word = word.toUpperCase();
         this.tip = tip;
-    }
+    };
+
+    get sentence() {
+        return this.#character;
+    };
 
     printData() {
-        console.log(this.word);
-    }
+        console.log(this.#character + this.word);
+    };
 
 };
 
@@ -61,3 +66,5 @@ export const start = () => {
     };
 
 };
+
+start();
