@@ -2,17 +2,20 @@
 //Objeto de forca com suas respectivas funções
 export class Forca {
     static NomePadrao = 'Não definido'
-    constructor(nome, palavraEscolhida) {
-        if (!nome)
-            this.NomeJogador = this.nomePadrao
-        else this.NomeJogador = nome
+    constructor(nome, word) {
+        if (word) {
+            if (!nome)
+                this.NomeJogador = this.NomePadrao
+            else this.NomeJogador = nome
 
-        this.PalavraEscolhida = palavraEscolhida.toUpperCase().replace('\r', '')
-        this.QuantidadeCaracteres = this.PalavraEscolhida.length
-        this.LetrasDecifradas = this.PalavraEscolhida.map(() => "_")
-        this.LetrasJaEscolhidas = []
-        this.QuantidadeVidas = 6
-        this.InicioJogo = new Date()
+            this.PalavraEscolhida = word.word
+            this.Dica = dica
+            this.QuantidadeCaracteres = word.getLengthSentence()
+            this.LetrasDecifradas = this.PalavraEscolhida.map(() => "_")
+            this.LetrasJaEscolhidas = []
+            this.QuantidadeVidas = 6
+            this.InicioJogo = new Date()
+        }
     }
 
     get getTempoJogo() {
@@ -29,44 +32,33 @@ export class Forca {
     }
 
     verificarLetra(letra) {
-        var resultado = verificarLetraForca(letra, this.getPalavraEscolhidaArray(), this.PalavraEscolhida, this.LetrasJaEscolhidas, this.QuantidadeVidas)
+        const resultado = verificarLetraForca(letra, this.getPalavraEscolhidaArray(), this.PalavraEscolhida, this.LetrasJaEscolhidas, this.QuantidadeVidas)
         this.QuantidadeVidas = resultado.QtdVidas
         return resultado
     }
+
 }
 
 export class PlacarJogo {
     static nomePlacar = 'PlacarJogo'
     constructor() {
-        if (!localStorage.getItem(nomePlacar))
-            localStorage.setItem(nomePlacar, [])
+        if (!localStorage.getItem(this.nomePlacar))
+            localStorage.setItem(this.nomePlacar, [])
     }
 
 
     inserirPlacar(nome, tempo) {
-        var lista = this.getPlacar()
+        const lista = this.getPlacar()
         lista.push({ NomeJogador: nome, Tempo: tempo })
         localStorage.setItem(nomePlacar, lista.sort(s => s.Tempo))
     }
 
     getTop5Placar() {
-        return localStorage.getItem(nomePlacar).array.slice(0, 5)
+        return this.getPlacar().slice(0, 5)
     }
     getPlacar() {
         return localStorage.getItem(nomePlacar)
     }
-}
-
-//Função para retornar um número inteiro dentre o valor mínimo e máximo
-const retornarKeyAleatorio = (min, max) => {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-//Função para retornar o objeto aleatório a partir da lista
-export const gerarPalavraAleatoria = (lista) => {
-    return lista[retornarKeyAleatorio(0, lista.length)]
 }
 
 //Função que valida a letra dentro da forca

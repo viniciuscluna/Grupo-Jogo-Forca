@@ -1,22 +1,29 @@
-import { gerarPalavraAleatoria, validarLetraForca, gerarImagemForca, Forca, PlacarJogo } from './funcoes.js'
-import { carregarJson } from './carregarJson'
+import { validarLetraForca, gerarImagemForca, Forca, PlacarJogo } from './funcoes.js'
+import { start } from './carregarJson'
 
 //Carregar arquivo pela API
-const listaPalavras = await carregarJson();
+const generateWord = async () => (
+    await start()
+)
+
+
 
 //Preencher variável com o nome do jogador
 const nomeJogador = prompt('Digite seu nome:')
 if (nomeJogador)
     usuario.innerText = `Olá : ${nomeJogador}`
 
+
+
 //Instância inicial do objeto Forca
-let jogoForca = new Forca(nomeJogador, gerarPalavraAleatoria(listaPalavras))
+let jogoForca
 
 
 const placar = new PlacarJogo()
 
 
 //Mapeamento de Campos do DOM pelo browserAPI
+const btnTeclado = document.getElementsByClassName('teclado')
 const btnIniciar = document.getElementById('btnIniciar')
 const btnInserir = document.getElementById('btnInserir')
 const txtForca = document.getElementById('txtForca')
@@ -29,28 +36,43 @@ const mensagemForcaEscolhidas = document.getElementById('mensagemForcaEscolhidas
 const placarJogo = document.getElementById('placarJogo')
 
 
+for (let i = 0; i < btnTeclado.length; i++) {
+    const btnPosicao = btnTeclado[i]
+    const letra = btnPosicao.getAttribute("data-letra")
+    btnPosicao.onclick = function () {
+        inserirLetra(letra)
+        btnPosicao.setAttribute("disabled", true)
+    }
+};
+
+
 //Gerar imagem inicial da forca com o carregamento da tela
-imgForca.setAttribute('src', gerarImagemForca(jogoForca.QuantidadeVidas))
+imgForca.setAttribute('src', gerarImagemForca(6))
 
 //Tratativa do botão iniciar
-btnIniciar.onclick = () => {
-    carregarForca()
-    txtForca.focus()
-    txtForca.style = ''
-    btnInserir.style = ''
-    btnIniciar.innerText = 'Reiniciar'
+btnIniciar.onclick = async () => {
+    await carregarForca()
+        .then(() => {
+            txtForca.focus()
+            txtForca.style = ''
+            btnInserir.style = ''
+            btnIniciar.innerText = 'Reiniciar'
+        })
 }
 
-
-//Tratativa do botão inserir
-btnInserir.onclick = () => {
-    tratarInsercaoLetra(txtForca.value)
+const inserirLetra = (letra) => {
+    tratarInsercaoLetra(letra)
     recarregarCampos()
-    txtForca.value = ''
-    txtForca.focus()
     verificarSeVenceu()
     if (jogoForca.QuantidadeVidas === 0)
         tratarPerdeuJogo()
+}
+
+//Tratativa do botão inserir
+btnInserir.onclick = () => {
+    inserirLetra(txtForca.value)
+    txtForca.value = ''
+    txtForca.focus()
 }
 
 //Método para mostrar ao jogador quando ele perder o jogo
@@ -67,7 +89,7 @@ const tratarPerdeuJogo = () => {
 //Método executado para validar a letra inserida pelo usuário
 const tratarInsercaoLetra = (letra) => {
     if (validarLetraForca(letra)) {
-        var resultado = jogoForca.verificarLetra(letra)
+        const resultado = jogoForca.verificarLetra(letra)
         alerta.innerText = resultado.Mensagem
     }
     else {
@@ -85,10 +107,13 @@ const recarregarCampos = () => {
 }
 
 //Método com função de reinstanciar o objeto de forca
-const carregarForca = () => {
-    jogoForca = new Forca(nomeJogador, gerarPalavraAleatoria(listaPalavras))
-    recarregarCampos()
-    alerta.innerHTML = "Insira uma letra abaixo e clique em 'Verificar Letra'!"
+const carregarForca = async () => {
+    await generateWord()
+        .then(word => {
+            jogoForca = new Forca(nomeJogador, word)
+            recarregarCampos()
+            alerta.innerHTML = "Insira uma letra abaixo e clique em 'Verificar Letra'!"
+        })
 }
 
 
@@ -102,18 +127,21 @@ const gerarTextoFinal = (texto) => {
 }
 
 //Método para verificar se a forca está completa
-const verificarSeVenceu = () => {
+const verificarSeVenceu = async () => {
     imgForca.setAttribute('src', gerarImagemForca(jogoForca.QuantidadeVidas))
     if (jogoForca.verificarForcaCompleta()) {
         alert(`Você venceu!!\n A Palavra é (${jogoForca.PalavraEscolhida}): ${gerarTextoFinal(jogoForca.LetrasDecifradas)}`)
-        carregarForca()
-        txtForca.style = 'display:none'
-        btnInserir.style = 'display:none'
-        mensagem.innerText = ``
-        mensagemForca.innerText = ``
-        mensagemForcaEscolhidas.innerText = ``
-        alerta.innerHTML = 'Renicie o jogo clicando acima'
-        placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
+        await carregarForca()
+            .then(()=>{
+                txtForca.style = 'display:none'
+                btnInserir.style = 'display:none'
+                mensagem.innerText = ``
+                mensagemForca.innerText = ``
+                mensagemForcaEscolhidas.innerText = ``
+                alerta.innerHTML = 'Renicie o jogo clicando acima'
+                placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
+        })
+        
     }
 }
 

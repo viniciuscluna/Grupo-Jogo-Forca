@@ -1,0 +1,1 @@
+export const address = 'https://gist.githubusercontent.com/Sogolonmvj/89034432c782897e1d08a9c94b842e5e/raw/bb9187ea792dd45451a1c65a9bee5e62304d8d9e/characters.json';
