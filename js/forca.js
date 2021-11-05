@@ -1,30 +1,35 @@
 import { validarLetraForca, gerarImagemForca, Forca, PlacarJogo } from './funcoes.js'
 import { start } from './carregarJson.js'
 
-//Mapeamento de Campos do DOM pelo browserAPI
-const btnTeclado = document.getElementsByClassName('teclado')
+//Mapeamento de Campos do DOM pelo browserAPI+
+const lblMensagemInicio = document.getElementById('lblMensagemInicio')
+const lblJogador = document.getElementById('lblJogador')
+const btnTeclados = document.getElementsByClassName('teclado')
 const btnIniciar = document.getElementById('btnIniciar')
 const btnInserir = document.getElementById('btnInserir')
 const txtForca = document.getElementById('txtForca')
 // const alerta = document.getElementById('mensagemAlerta')
 // const usuario = document.getElementById('msgUsuario')
-const imgForca = document.getElementById('imgForca')
+//const imgForca = document.getElementById('imgForca')
 // const mensagem = document.getElementById('mensagem')
 // const mensagemForca = document.getElementById('mensagemForca')
 // const mensagemForcaEscolhidas = document.getElementById('mensagemForcaEscolhidas')
 const placarJogo = document.getElementById('placarJogo')
-
+let nomeJogador;
 //Carregar arquivo pela API
 const generateWord = async () => (
     await start()
 )
 
 
+lblMensagemInicio.innerText = "Digite seu nome:"
+btnInserir.innerText = "Inserir Nome"
+
 
 //Preencher variável com o nome do jogador
-const nomeJogador = prompt('Digite seu nome:')
+//const nomeJogador = prompt('Digite seu nome:')
 //if (nomeJogador)
-   // usuario.innerText = `Olá : ${nomeJogador}`
+// usuario.innerText = `Olá : ${nomeJogador}`
 
 
 
@@ -36,8 +41,8 @@ const placar = new PlacarJogo()
 
 
 
-for (let i = 0; i < btnTeclado.length; i++) {
-    const btnPosicao = btnTeclado[i]
+for (let i = 0; i < btnTeclados.length; i++) {
+    const btnPosicao = btnTeclados[i]
     const letra = btnPosicao.getAttribute("data-letra")
     btnPosicao.onclick = function () {
         inserirLetra(letra)
@@ -47,7 +52,7 @@ for (let i = 0; i < btnTeclado.length; i++) {
 
 
 //Gerar imagem inicial da forca com o carregamento da tela
-imgForca.setAttribute('src', gerarImagemForca(6))
+//imgForca.setAttribute('src', gerarImagemForca(6))
 
 //Tratativa do botão iniciar
 btnIniciar.onclick = async () => {
@@ -69,10 +74,21 @@ const inserirLetra = (letra) => {
 }
 
 //Tratativa do botão inserir
-btnInserir.onclick = () => {
+btnInserir.onclick = (e) => {
+    if (!nomeJogador) {
+        e.preventDefault();
+        nomeJogador = txtForca.value
+        lblJogador.innerText = nomeJogador
+        lblMensagemInicio.innerText = "Tente adivinhar a palavra:"
+        btnInserir.innerText = "Verificar palavra"
+        txtForca.value = ""
+        return
+    }
+
     inserirLetra(txtForca.value)
     txtForca.value = ''
     txtForca.focus()
+
 }
 
 //Método para mostrar ao jogador quando ele perder o jogo
@@ -132,7 +148,7 @@ const verificarSeVenceu = async () => {
     if (jogoForca.verificarForcaCompleta()) {
         alert(`Você venceu!!\n A Palavra é (${jogoForca.PalavraEscolhida}): ${gerarTextoFinal(jogoForca.LetrasDecifradas)}`)
         await carregarForca()
-            .then(()=>{
+            .then(() => {
                 txtForca.style = 'display:none'
                 btnInserir.style = 'display:none'
                 mensagem.innerText = ``
@@ -140,8 +156,8 @@ const verificarSeVenceu = async () => {
                 mensagemForcaEscolhidas.innerText = ``
                 alerta.innerHTML = 'Renicie o jogo clicando acima'
                 placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
-        })
-        
+            })
+
     }
 }
 

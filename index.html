@@ -25,6 +25,10 @@
                 <p>Jogue agora mesmo e divirta-se!</p>
             </div>
         </div>
+         <!-- TODO -->
+         <button class="teclado" data-letra="A">A</button>
+         <button class="teclado" data-letra="B">B</button>
+         <button class="teclado" data-letra="C">C</button>
     </header>
 
     <main>
@@ -55,13 +59,16 @@
             <form class="border border-dark rounded w-50 mx-auto p-3">
                 <div class="row flex-column gap-2 align-items-center text-center">
                     <div class="col-6">
-                        <label class="col-form-label">Insira uma letra:</label>
+                        <!-- TODO -->
+                        <label class="col-form-label" id="lblJogador"></label>
+                        <label class="col-form-label" id="lblMensagemInicio">Insira uma letra:</label>
                     </div>
                     <div class="col-6">
                         <input class="form-control text-center text-uppercase" type="text" id="txtForca">
                     </div>
                     <div class="d-grid col-6">
-                        <button class="btn btn-success" id="btnInserir">Validar</button>
+                        <button class="btn btn-success" type="button" id="btnInserir">Validar</button>
+                        <button class="btn btn-success" type="button" id="btnIniciar">Iniciar</button>
                     </div>
                 </div>
             </form>
