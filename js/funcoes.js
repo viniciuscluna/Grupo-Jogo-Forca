@@ -9,30 +9,30 @@ export class Forca {
             else this.NomeJogador = nome
 
             this.PalavraEscolhida = word.word
-            this.Dica = dica
+            this.Dica = word.tip
             this.QuantidadeCaracteres = word.getLengthSentence()
-            this.LetrasDecifradas = this.PalavraEscolhida.map(() => "_")
+            this.LetrasDecifradas = this.PalavraEscolhida.split("").map(() => "_")
             this.LetrasJaEscolhidas = []
             this.QuantidadeVidas = 6
             this.InicioJogo = new Date()
         }
     }
 
-    get getTempoJogo() {
+    getTempoJogo() {
         const fimJogo = new Date()
-        return this.InicioJogo.getTime() - fimJogo.getTime()
+        return fimJogo.getTime() - this.InicioJogo.getTime()
     }
 
-    get getPalavraEscolhidaArray() {
+    getPalavraEscolhidaArray() {
         return this.PalavraEscolhida.split('')
     }
 
-    get verificarForcaCompleta() {
+    verificarForcaCompleta() {
         return JSON.stringify(this.LetrasJaEscolhidas) === JSON.stringify(this.LetrasDecifradas)
     }
 
     verificarLetra(letra) {
-        const resultado = verificarLetraForca(letra, this.getPalavraEscolhidaArray(), this.PalavraEscolhida, this.LetrasJaEscolhidas, this.QuantidadeVidas)
+        const resultado = verificarLetraForca(letra, this.getPalavraEscolhidaArray(), this.LetrasDecifradas, this.LetrasJaEscolhidas, this.QuantidadeVidas)
         this.QuantidadeVidas = resultado.QtdVidas
         return resultado
     }
@@ -42,27 +42,29 @@ export class Forca {
 export class PlacarJogo {
     static nomePlacar = 'PlacarJogo'
     constructor() {
-        if (!localStorage.getItem(this.nomePlacar))
-            localStorage.setItem(this.nomePlacar, [])
+        if (!localStorage.getItem(PlacarJogo.nomePlacar))
+            localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify('[]'))
     }
 
 
     inserirPlacar(nome, tempo) {
         const lista = this.getPlacar()
         lista.push({ NomeJogador: nome, Tempo: tempo })
-        localStorage.setItem(nomePlacar, lista.sort(s => s.Tempo))
+        localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify(lista.sort(s => s.Tempo)))
     }
 
     getTop5Placar() {
         return this.getPlacar().slice(0, 5)
     }
+
     getPlacar() {
-        return localStorage.getItem(nomePlacar)
+        return JSON.parse(localStorage.getItem(PlacarJogo.nomePlacar))
     }
 }
 
 //Função que valida a letra dentro da forca
 function verificarLetraForca(letra, palavraEscolhida, palavraDecrifrada, letrasJaEscolhidas, qtdVidas) {
+    debugger
     if (palavraDecrifrada.includes(letra) || letrasJaEscolhidas.includes(letra)) {
         return {
             Sucesso: false,

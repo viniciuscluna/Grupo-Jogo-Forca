@@ -10,11 +10,12 @@ const btnInserir = document.getElementById('btnInserir')
 const txtForca = document.getElementById('txtForca')
 // const alerta = document.getElementById('mensagemAlerta')
 // const usuario = document.getElementById('msgUsuario')
-//const imgForca = document.getElementById('imgForca')
+const imgForca = document.getElementById('imgForca')
 // const mensagem = document.getElementById('mensagem')
 // const mensagemForca = document.getElementById('mensagemForca')
 // const mensagemForcaEscolhidas = document.getElementById('mensagemForcaEscolhidas')
 const placarJogo = document.getElementById('placarJogo')
+const tip = document.getElementById('tip')
 let nomeJogador;
 //Carregar arquivo pela API
 const generateWord = async () => (
@@ -40,7 +41,6 @@ let jogoForca
 const placar = new PlacarJogo()
 
 
-
 for (let i = 0; i < btnTeclados.length; i++) {
     const btnPosicao = btnTeclados[i]
     const letra = btnPosicao.getAttribute("data-letra")
@@ -52,7 +52,7 @@ for (let i = 0; i < btnTeclados.length; i++) {
 
 
 //Gerar imagem inicial da forca com o carregamento da tela
-//imgForca.setAttribute('src', gerarImagemForca(6))
+imgForca.setAttribute('src', gerarImagemForca(6))
 
 //Tratativa do botão iniciar
 btnIniciar.onclick = async () => {
@@ -73,19 +73,27 @@ const inserirLetra = (letra) => {
         tratarPerdeuJogo()
 }
 
+const inserirPalavra = (palavra) => {
+    if (jogoForca.PalavraEscolhida.toUpperCase() === palavra.toUpperCase()) {
+        verificarSeVenceu(true);
+    } else {
+        tratarPerdeuJogo();
+    }
+}
+
 //Tratativa do botão inserir
 btnInserir.onclick = (e) => {
     if (!nomeJogador) {
         e.preventDefault();
         nomeJogador = txtForca.value
-        lblJogador.innerText = nomeJogador
-        lblMensagemInicio.innerText = "Tente adivinhar a palavra:"
+        lblJogador.innerText = nomeJogador[0].toUpperCase() + nomeJogador.substring(1).toLowerCase() + ','
+        lblMensagemInicio.innerText = "tente adivinhar a palavra:"
         btnInserir.innerText = "Verificar palavra"
         txtForca.value = ""
         return
     }
 
-    inserirLetra(txtForca.value)
+    inserirPalavra(txtForca.value)
     txtForca.value = ''
     txtForca.focus()
 
@@ -96,30 +104,47 @@ const tratarPerdeuJogo = () => {
     alert(`Você perdeu.... \n A palavra era: ${jogoForca.PalavraEscolhida}`)
     txtForca.style = 'display:none'
     btnInserir.style = 'display:none'
-    mensagem.innerText = ``
-    mensagemForca.innerText = ``
-    mensagemForcaEscolhidas.innerText = ``
-    alerta.innerHTML = 'Você perdeu, caso queira jogar novamente, clique acima.'
+    // mensagem.innerText = ``
+    // mensagemForca.innerText = ``
+    // mensagemForcaEscolhidas.innerText = ``
+    // alerta.innerHTML = 'Você perdeu, caso queira jogar novamente, clique acima.'
 }
 
 //Método executado para validar a letra inserida pelo usuário
 const tratarInsercaoLetra = (letra) => {
     if (validarLetraForca(letra)) {
         const resultado = jogoForca.verificarLetra(letra)
-        alerta.innerText = resultado.Mensagem
+        // alerta.innerText = resultado.Mensagem
     }
     else {
         alerta.innerText = 'Caractere inválido'
     }
 }
 
+const gerarCamposAdvinhados = (listaLetras) => {
+
+    const divPalavra = document.getElementById('palavraForca');
+
+    divPalavra.innerHTML = '';
+
+    for (let i = 0; i < listaLetras.length; i++) {
+        let span = document.createElement('span');
+        span.setAttribute('id', i);
+        span.innerText = listaLetras[i];
+    
+        divPalavra.appendChild(span);
+    }
+}
+
 //Método com objetivo de sincronizar o FRONT com as alterações no objeto
 const recarregarCampos = () => {
-    mensagem.innerText = `Sua animal tem ${jogoForca.QuantidadeCaracteres} letras!`
-    mensagemForca.innerText = `Sua forca nesse momento: ${jogoForca.LetrasDecifradas.join(' ')}`
-    mensagemForcaEscolhidas.innerText = `Letras não encontradas: ${jogoForca.LetrasJaEscolhidas.join(',')}, Vidas Restantes: (${jogoForca.QuantidadeVidas})`
+    gerarCamposAdvinhados(jogoForca.LetrasDecifradas);
+    tip.innerText = `Dica: ${jogoForca.Dica}`;
+    // mensagem.innerText = `Sua animal tem ${jogoForca.QuantidadeCaracteres} letras!`
+    // mensagemForca.innerText = `Sua forca nesse momento: ${jogoForca.LetrasDecifradas.join(' ')}`
+    // mensagemForcaEscolhidas.innerText = `Letras não encontradas: ${jogoForca.LetrasJaEscolhidas.join(',')}, Vidas Restantes: (${jogoForca.QuantidadeVidas})`
     imgForca.setAttribute('src', gerarImagemForca(jogoForca.QuantidadeVidas))
-    placarJogo.innerText = JSON.stringify(placar.getTop5Placar())
+    // placarJogo.innerText = JSON.stringify(placar.getTop5Placar())
 }
 
 //Método com função de reinstanciar o objeto de forca
@@ -128,7 +153,7 @@ const carregarForca = async () => {
         .then(word => {
             jogoForca = new Forca(nomeJogador, word)
             recarregarCampos()
-            alerta.innerHTML = "Insira uma letra abaixo e clique em 'Verificar Letra'!"
+            // alerta.innerHTML = "Insira uma letra abaixo e clique em 'Verificar Letra'!"
         })
 }
 
@@ -143,19 +168,19 @@ const gerarTextoFinal = (texto) => {
 }
 
 //Método para verificar se a forca está completa
-const verificarSeVenceu = async () => {
+const verificarSeVenceu = async (jaVenceu) => {
     imgForca.setAttribute('src', gerarImagemForca(jogoForca.QuantidadeVidas))
-    if (jogoForca.verificarForcaCompleta()) {
+    if (jogoForca.verificarForcaCompleta() || jaVenceu) {
         alert(`Você venceu!!\n A Palavra é (${jogoForca.PalavraEscolhida}): ${gerarTextoFinal(jogoForca.LetrasDecifradas)}`)
+        placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
         await carregarForca()
             .then(() => {
                 txtForca.style = 'display:none'
                 btnInserir.style = 'display:none'
-                mensagem.innerText = ``
-                mensagemForca.innerText = ``
-                mensagemForcaEscolhidas.innerText = ``
-                alerta.innerHTML = 'Renicie o jogo clicando acima'
-                placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
+                // mensagem.innerText = ``
+                // mensagemForca.innerText = ``
+                // mensagemForcaEscolhidas.innerText = ``
+                // alerta.innerHTML = 'Reinicie o jogo clicando acima'
             })
 
     }
