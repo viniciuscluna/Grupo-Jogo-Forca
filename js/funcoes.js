@@ -64,7 +64,7 @@ export class PlacarJogo {
 
 //Função que valida a letra dentro da forca
 function verificarLetraForca(letra, palavraEscolhida, palavraDecrifrada, letrasJaEscolhidas, qtdVidas) {
-    debugger
+    
     if (palavraDecrifrada.includes(letra) || letrasJaEscolhidas.includes(letra)) {
         return {
             Sucesso: false,
