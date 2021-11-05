@@ -9,7 +9,7 @@ const btnIniciar = document.getElementById('btnIniciar')
 const btnInserir = document.getElementById('btnInserir')
 const btnRestart = document.getElementById('btnRestart')
 const txtForca = document.getElementById('txtForca')
-// const alerta = document.getElementById('mensagemAlerta')
+const alerta = document.getElementById('alerta')
 // const usuario = document.getElementById('msgUsuario')
 const imgForca = document.getElementById('imgForca')
 // const mensagem = document.getElementById('mensagem')
@@ -51,9 +51,21 @@ for (let i = 0; i < btnTeclados.length; i++) {
     }
 };
 
+const gerarPlacar = () => {
+    placarJogo.innerHTML = ''
+    var top5 = placar.getTop5Placar()
+    for (let i of top5) {
+        let li = document.createElement('li');
+        li.setAttribute('id', i);
+        li.innerText = `Jogador : ${i.NomeJogador}, Tempo: ${i.Tempo} (segundos)`;
+        placarJogo.appendChild(li);
+    }
+}
+
 
 //Gerar imagem inicial da forca com o carregamento da tela
 imgForca.setAttribute('src', gerarImagemForca(6))
+gerarPlacar()
 
 //Tratativa do botão iniciar
 btnIniciar.onclick = async () => {
@@ -105,7 +117,7 @@ btnInserir.onclick = (e) => {
         txtForca.value = ""
         txtForca.disabled = true
 
-
+        btnIniciar.click()
         return
     }
 
@@ -123,14 +135,14 @@ const tratarPerdeuJogo = () => {
     // mensagem.innerText = ``
     // mensagemForca.innerText = ``
     // mensagemForcaEscolhidas.innerText = ``
-    // alerta.innerHTML = 'Você perdeu, caso queira jogar novamente, clique acima.'
+    alerta.innerHTML = 'Você perdeu, caso queira jogar novamente, clique em reiniciar.'
 }
 
 //Método executado para validar a letra inserida pelo usuário
 const tratarInsercaoLetra = (letra) => {
     if (validarLetraForca(letra)) {
         const resultado = jogoForca.verificarLetra(letra)
-        // alerta.innerText = resultado.Mensagem
+        alerta.innerText = resultado.Mensagem
     }
     else {
         alerta.innerText = 'Caractere inválido'
@@ -160,7 +172,7 @@ const recarregarCampos = () => {
     // mensagemForca.innerText = `Sua forca nesse momento: ${jogoForca.LetrasDecifradas.join(' ')}`
     // mensagemForcaEscolhidas.innerText = `Letras não encontradas: ${jogoForca.LetrasJaEscolhidas.join(',')}, Vidas Restantes: (${jogoForca.QuantidadeVidas})`
     imgForca.setAttribute('src', gerarImagemForca(jogoForca.QuantidadeVidas))
-    // placarJogo.innerText = JSON.stringify(placar.getTop5Placar())
+    gerarPlacar()
 }
 
 //Método com função de reinstanciar o objeto de forca
@@ -169,7 +181,7 @@ const carregarForca = async () => {
         .then(word => {
             jogoForca = new Forca(nomeJogador, word)
             recarregarCampos()
-            // alerta.innerHTML = "Insira uma letra abaixo e clique em 'Verificar Letra'!"
+            alerta.innerHTML = "Digite a palavra completa se souber ou clique em alguma letra!"
         })
 }
 
@@ -196,7 +208,7 @@ const verificarSeVenceu = async (jaVenceu) => {
                 // mensagem.innerText = ``
                 // mensagemForca.innerText = ``
                 // mensagemForcaEscolhidas.innerText = ``
-                // alerta.innerHTML = 'Reinicie o jogo clicando acima'
+                alerta.innerHTML = 'Reinicie o jogo clicando acima'
             })
 
     }
