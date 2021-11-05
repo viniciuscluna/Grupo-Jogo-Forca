@@ -1,5 +1,18 @@
 import { validarLetraForca, gerarImagemForca, Forca, PlacarJogo } from './funcoes.js'
-import { start } from './carregarJson'
+import { start } from './carregarJson.js'
+
+//Mapeamento de Campos do DOM pelo browserAPI
+const btnTeclado = document.getElementsByClassName('teclado')
+const btnIniciar = document.getElementById('btnIniciar')
+const btnInserir = document.getElementById('btnInserir')
+const txtForca = document.getElementById('txtForca')
+// const alerta = document.getElementById('mensagemAlerta')
+// const usuario = document.getElementById('msgUsuario')
+const imgForca = document.getElementById('imgForca')
+// const mensagem = document.getElementById('mensagem')
+// const mensagemForca = document.getElementById('mensagemForca')
+// const mensagemForcaEscolhidas = document.getElementById('mensagemForcaEscolhidas')
+const placarJogo = document.getElementById('placarJogo')
 
 //Carregar arquivo pela API
 const generateWord = async () => (
@@ -10,8 +23,8 @@ const generateWord = async () => (
 
 //Preencher variável com o nome do jogador
 const nomeJogador = prompt('Digite seu nome:')
-if (nomeJogador)
-    usuario.innerText = `Olá : ${nomeJogador}`
+//if (nomeJogador)
+   // usuario.innerText = `Olá : ${nomeJogador}`
 
 
 
@@ -21,19 +34,6 @@ let jogoForca
 
 const placar = new PlacarJogo()
 
-
-//Mapeamento de Campos do DOM pelo browserAPI
-const btnTeclado = document.getElementsByClassName('teclado')
-const btnIniciar = document.getElementById('btnIniciar')
-const btnInserir = document.getElementById('btnInserir')
-const txtForca = document.getElementById('txtForca')
-const alerta = document.getElementById('mensagemAlerta')
-const usuario = document.getElementById('msgUsuario')
-const imgForca = document.getElementById('imgForca')
-const mensagem = document.getElementById('mensagem')
-const mensagemForca = document.getElementById('mensagemForca')
-const mensagemForcaEscolhidas = document.getElementById('mensagemForcaEscolhidas')
-const placarJogo = document.getElementById('placarJogo')
 
 
 for (let i = 0; i < btnTeclado.length; i++) {
