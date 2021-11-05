@@ -41,7 +41,7 @@ let jogoForca
 
 const placar = new PlacarJogo()
 
-
+//Preparar ação onclick para os botõesinserirPlacar
 for (let i = 0; i < btnTeclados.length; i++) {
     const btnPosicao = btnTeclados[i]
     const letra = btnPosicao.getAttribute("data-letra")
@@ -63,15 +63,15 @@ btnIniciar.onclick = async () => {
             txtForca.style = ''
             txtForca.disabled = false
             btnInserir.style = ''
-            btnInserir.disabled = false            
+            btnInserir.disabled = false
             btnIniciar.classList.add('d-none')
-            btnRestart.classList.remove('d-none')            
+            btnRestart.classList.remove('d-none')
         })
 }
 
 //Função do botão reiniciar
-btnRestart.onclick = () =>{
- location.reload(true)
+btnRestart.onclick = () => {
+    location.reload(true)
 }
 
 
@@ -104,8 +104,8 @@ btnInserir.onclick = (e) => {
         txtForca.placeholder = "Palavra Completa"
         txtForca.value = ""
         txtForca.disabled = true
-        
-        
+
+
         return
     }
 
@@ -142,14 +142,14 @@ const gerarCamposAdvinhados = (listaLetras) => {
     const divPalavra = document.getElementById('palavraForca');
 
     divPalavra.innerHTML = '';
+    if (listaLetras)
+        for (let i = 0; i < listaLetras.length; i++) {
+            let span = document.createElement('span');
+            span.setAttribute('id', i);
+            span.innerText = listaLetras[i];
 
-    for (let i = 0; i < listaLetras.length; i++) {
-        let span = document.createElement('span');
-        span.setAttribute('id', i);
-        span.innerText = listaLetras[i];
-    
-        divPalavra.appendChild(span);
-    }
+            divPalavra.appendChild(span);
+        }
 }
 
 //Método com objetivo de sincronizar o FRONT com as alterações no objeto

@@ -20,7 +20,7 @@ export class Forca {
 
     getTempoJogo() {
         const fimJogo = new Date()
-        return fimJogo.getTime() - this.InicioJogo.getTime()
+        return ((fimJogo.getTime() - this.InicioJogo.getTime()) / 1000)
     }
 
     getPalavraEscolhidaArray() {
@@ -28,7 +28,7 @@ export class Forca {
     }
 
     verificarForcaCompleta() {
-        return JSON.stringify(this.LetrasJaEscolhidas) === JSON.stringify(this.LetrasDecifradas)
+        return JSON.stringify(this.getPalavraEscolhidaArray()) === JSON.stringify(this.LetrasDecifradas)
     }
 
     verificarLetra(letra) {
@@ -43,14 +43,14 @@ export class PlacarJogo {
     static nomePlacar = 'PlacarJogo'
     constructor() {
         if (!localStorage.getItem(PlacarJogo.nomePlacar))
-            localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify('[]'))
+            localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify([]))
     }
 
 
     inserirPlacar(nome, tempo) {
         const lista = this.getPlacar()
         lista.push({ NomeJogador: nome, Tempo: tempo })
-        localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify(lista.sort(s => s.Tempo)))
+        localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify(lista.sort(s => s.Tempo).reverse()))
     }
 
     getTop5Placar() {
