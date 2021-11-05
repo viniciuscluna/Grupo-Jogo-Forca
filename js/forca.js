@@ -7,6 +7,7 @@ const lblJogador = document.getElementById('lblJogador')
 const btnTeclados = document.getElementsByClassName('teclado')
 const btnIniciar = document.getElementById('btnIniciar')
 const btnInserir = document.getElementById('btnInserir')
+const btnRestart = document.getElementById('btnRestart')
 const txtForca = document.getElementById('txtForca')
 // const alerta = document.getElementById('mensagemAlerta')
 // const usuario = document.getElementById('msgUsuario')
@@ -60,10 +61,19 @@ btnIniciar.onclick = async () => {
         .then(() => {
             txtForca.focus()
             txtForca.style = ''
+            txtForca.disabled = false
             btnInserir.style = ''
-            btnIniciar.innerText = 'Reiniciar'
+            btnInserir.disabled = false            
+            btnIniciar.classList.add('d-none')
+            btnRestart.classList.remove('d-none')            
         })
 }
+
+//Função do botão reiniciar
+btnRestart.onclick = () =>{
+ location.reload(true)
+}
+
 
 const inserirLetra = (letra) => {
     tratarInsercaoLetra(letra)
@@ -88,8 +98,14 @@ btnInserir.onclick = (e) => {
         nomeJogador = txtForca.value
         lblJogador.innerText = nomeJogador[0].toUpperCase() + nomeJogador.substring(1).toLowerCase() + ','
         lblMensagemInicio.innerText = "tente adivinhar a palavra:"
-        btnInserir.innerText = "Verificar palavra"
+        btnInserir.innerText = "Verificar palavra completa"
+        btnInserir.disabled = true
+        btnIniciar.disabled = false
+        txtForca.placeholder = "Palavra Completa"
         txtForca.value = ""
+        txtForca.disabled = true
+        
+        
         return
     }
 
