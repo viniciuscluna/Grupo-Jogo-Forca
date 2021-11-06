@@ -63,6 +63,7 @@ const gerarPlacar = () => {
 }
 
 
+
 //Gerar imagem inicial da forca com o carregamento da tela
 imgForca.setAttribute('src', gerarImagemForca(6))
 gerarPlacar()
@@ -103,6 +104,34 @@ const inserirPalavra = (palavra) => {
     }
 }
 
+
+btnInserir.addEventListener('click',
+    (e) => {
+        if (!nomeJogador) {
+            if (!(/^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]+$/g.test(e.target.value))) {
+                e.target.value = ''
+                alerta.innerText = 'Você é burro cara'
+                return
+            }
+            e.preventDefault();
+            nomeJogador = txtForca.value
+            lblJogador.innerText = nomeJogador[0].toUpperCase() + nomeJogador.substring(1).toLowerCase() + ','
+            lblMensagemInicio.innerText = "tente adivinhar a palavra:"
+            btnInserir.innerText = "Verificar palavra completa"
+            btnInserir.disabled = true
+            btnIniciar.disabled = false
+            txtForca.placeholder = "Palavra Completa"
+            txtForca.value = ""
+            txtForca.disabled = true
+
+            btnIniciar.click()
+            return
+        }
+
+        inserirPalavra(txtForca.value)
+        txtForca.value = ''
+        txtForca.focus()
+    })
 //Tratativa do botão inserir
 btnInserir.onclick = (e) => {
     if (!nomeJogador) {
@@ -186,20 +215,11 @@ const carregarForca = async () => {
 }
 
 
-//Método para retornar o texto final por meio de uma repetição
-const gerarTextoFinal = (texto) => {
-    let retorno = ''
-    for (let t of texto) {
-        retorno = retorno + `\n => ${t}`
-    }
-    return retorno
-}
-
 //Método para verificar se a forca está completa
 const verificarSeVenceu = async (jaVenceu) => {
     imgForca.setAttribute('src', gerarImagemForca(jogoForca.QuantidadeVidas))
     if (jogoForca.verificarForcaCompleta() || jaVenceu) {
-        alert(`Você venceu!!\n A Palavra é (${jogoForca.PalavraEscolhida}): ${gerarTextoFinal(jogoForca.LetrasDecifradas)}`)
+        alert(`Você venceu!!\n A Palavra é (${jogoForca.PalavraEscolhida})`)
         placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
         await carregarForca()
             .then(() => {

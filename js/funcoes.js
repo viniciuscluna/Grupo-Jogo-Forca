@@ -50,7 +50,7 @@ export class PlacarJogo {
     inserirPlacar(nome, tempo) {
         const lista = this.getPlacar()
         lista.push({ NomeJogador: nome, Tempo: tempo })
-        localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify(lista.sort(s => s.Tempo).reverse()))
+        localStorage.setItem(PlacarJogo.nomePlacar, JSON.stringify(lista.sort((s1, s2) => s1.Tempo - s2.Tempo)))
     }
 
     getTop5Placar() {
