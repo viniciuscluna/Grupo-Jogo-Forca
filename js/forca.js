@@ -5,7 +5,6 @@ import { start } from './carregarJson.js'
 const lblMensagemInicio = document.getElementById('lblMensagemInicio')
 const lblJogador = document.getElementById('lblJogador')
 const btnTeclados = document.getElementsByClassName('teclado')
-const btnIniciar = document.getElementById('btnIniciar')
 const btnInserir = document.getElementById('btnInserir')
 const btnRestart = document.getElementById('btnRestart')
 const txtForca = document.getElementById('txtForca')
@@ -68,7 +67,7 @@ imgForca.setAttribute('src', gerarImagemForca(6))
 gerarPlacar()
 
 //Tratativa do botão iniciar
-btnIniciar.onclick = async () => {
+const iniciarJogo = async  () => {
     await carregarForca()
         .then(() => {
             txtForca.focus()
@@ -76,7 +75,6 @@ btnIniciar.onclick = async () => {
             txtForca.disabled = false
             btnInserir.style = ''
             btnInserir.disabled = false
-            btnIniciar.classList.add('d-none')
             btnRestart.classList.remove('d-none')
         })
 }
@@ -112,12 +110,11 @@ btnInserir.onclick = (e) => {
         lblMensagemInicio.innerText = "tente adivinhar a palavra:"
         btnInserir.innerText = "Verificar palavra completa"
         btnInserir.disabled = true
-        btnIniciar.disabled = false
         txtForca.placeholder = "Palavra Completa"
         txtForca.value = ""
         txtForca.disabled = true
 
-        btnIniciar.click()
+        iniciarJogo();
         return
     }
 
