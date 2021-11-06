@@ -68,7 +68,7 @@ imgForca.setAttribute('src', gerarImagemForca(6))
 gerarPlacar()
 
 //Tratativa do botão iniciar
-const iniciarJogo = async  () => {
+const iniciarJogo = async () => {
     await carregarForca()
         .then(() => {
             txtForca.focus()
@@ -106,23 +106,26 @@ const inserirPalavra = (palavra) => {
 btnInserir.addEventListener('click',
     (e) => {
         if (!nomeJogador) {
-            if (!(/^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]+$/g.test(e.target.value))) {
-                e.target.value = ''
-                alerta.innerText = 'Você é burro cara'
+
+            if (!(/^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ]+$/g.test(txtForca.value))) {
+                txtForca.value = ''
+                alerta.innerText = 'Somente letras são permitidas!'
                 return
             }
+
             e.preventDefault();
             nomeJogador = txtForca.value
             lblJogador.innerText = nomeJogador[0].toUpperCase() + nomeJogador.substring(1).toLowerCase() + ','
             lblMensagemInicio.innerText = "tente adivinhar a palavra:"
             btnInserir.innerText = "Verificar palavra completa"
             btnInserir.disabled = true
-            btnIniciar.disabled = false
             txtForca.placeholder = "Palavra Completa"
             txtForca.value = ""
             txtForca.disabled = true
 
-            btnIniciar.click()
+            iniciarJogo();
+
+
             return
         }
 
@@ -130,28 +133,6 @@ btnInserir.addEventListener('click',
         txtForca.value = ''
         txtForca.focus()
     })
-//Tratativa do botão inserir
-btnInserir.onclick = (e) => {
-    if (!nomeJogador) {
-        e.preventDefault();
-        nomeJogador = txtForca.value
-        lblJogador.innerText = nomeJogador[0].toUpperCase() + nomeJogador.substring(1).toLowerCase() + ','
-        lblMensagemInicio.innerText = "tente adivinhar a palavra:"
-        btnInserir.innerText = "Verificar palavra completa"
-        btnInserir.disabled = true
-        txtForca.placeholder = "Palavra Completa"
-        txtForca.value = ""
-        txtForca.disabled = true
-
-        iniciarJogo();
-        return
-    }
-
-    inserirPalavra(txtForca.value)
-    txtForca.value = ''
-    txtForca.focus()
-
-}
 
 //Método para mostrar ao jogador quando ele perder o jogo
 const tratarPerdeuJogo = () => {
