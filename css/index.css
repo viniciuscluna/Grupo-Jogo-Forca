@@ -25,6 +25,11 @@ tr {
     align-items: center;
 }
 
+footer {
+    position: static;
+    bottom: 0;
+}
+
 @media only screen and (min-width: 1400px){
     .m-ajust {
         margin-right: 22px;
