@@ -9,6 +9,7 @@ const btnInserir = document.getElementById('btnInserir')
 const btnRestart = document.getElementById('btnRestart')
 const txtForca = document.getElementById('txtForca')
 const alerta = document.getElementById('alerta')
+const jogadorCompleto = document.getElementById('jogadorCompleto')
 // const usuario = document.getElementById('msgUsuario')
 const imgForca = document.getElementById('imgForca')
 // const mensagem = document.getElementById('mensagem')
@@ -17,6 +18,8 @@ const imgForca = document.getElementById('imgForca')
 const placarJogo = document.getElementById('placarJogo')
 const tip = document.getElementById('tip')
 let nomeJogador;
+
+
 //Carregar arquivo pela API
 const generateWord = async () => (
     await start()
@@ -54,10 +57,11 @@ const gerarPlacar = () => {
     placarJogo.innerHTML = ''
     var top5 = placar.getTop5Placar()
     for (let i of top5) {
-        let li = document.createElement('li');
-        li.setAttribute('id', i);
-        li.innerText = `Jogador : ${i.NomeJogador}, Tempo: ${i.Tempo} (segundos)`;
-        placarJogo.appendChild(li);
+        let tr = document.createElement('tr');
+        tr.setAttribute('id', i);
+        tr.setAttribute('class', "border-dark");
+        tr.innerText = `Jogador : ${i.NomeJogador}, Tempo: ${i.Tempo} (segundos)`;
+        placarJogo.appendChild(tr);
     }
 }
 
@@ -134,16 +138,6 @@ btnInserir.addEventListener('click',
         txtForca.focus()
     })
 
-//Método para mostrar ao jogador quando ele perder o jogo
-const tratarPerdeuJogo = () => {
-    alert(`Você perdeu.... \n A palavra era: ${jogoForca.PalavraEscolhida}`)
-    txtForca.style = 'display:none'
-    btnInserir.style = 'display:none'
-    // mensagem.innerText = ``
-    // mensagemForca.innerText = ``
-    // mensagemForcaEscolhidas.innerText = ``
-    alerta.innerHTML = 'Você perdeu, caso queira jogar novamente, clique em reiniciar.'
-}
 
 //Método executado para validar a letra inserida pelo usuário
 const tratarInsercaoLetra = (letra) => {
@@ -199,17 +193,19 @@ const verificarSeVenceu = async (jaVenceu) => {
     if (jogoForca.verificarForcaCompleta() || jaVenceu) {
         alert(`Você venceu!!\n A Palavra é (${jogoForca.PalavraEscolhida})`)
         placar.inserirPlacar(nomeJogador, jogoForca.getTempoJogo())
-        await carregarForca()
-            .then(() => {
-                txtForca.style = 'display:none'
-                btnInserir.style = 'display:none'
-                // mensagem.innerText = ``
-                // mensagemForca.innerText = ``
-                // mensagemForcaEscolhidas.innerText = ``
-                alerta.innerHTML = 'Reinicie o jogo clicando acima'
-            })
-
+        btnInserir.classList.add('d-none')
+        txtForca.classList.add('d-none')
+        jogadorCompleto.classList.add('d-none')
+        alerta.innerHTML = 'Você venceu, caso queira jogar novamente, clique em reiniciar.'
     }
+}
+
+//Método para mostrar ao jogador quando ele perder o jogo
+const tratarPerdeuJogo = () => {
+    alert(`Você perdeu.... \n A palavra era: ${jogoForca.PalavraEscolhida}`)
+    txtForca.style = 'display:none'
+    btnInserir.style = 'display:none'  
+    alerta.innerHTML = 'Você perdeu, caso queira jogar novamente, clique em reiniciar.'
 }
 
 

@@ -13,3 +13,11 @@ span {
     margin-left: 5px;
     text-transform: uppercase;
 }
+
+.m-dir {
+    margin-right: 100px;
+}
+
+tr {
+    font-size: small;
+}
