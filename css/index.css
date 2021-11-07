@@ -14,10 +14,26 @@ span {
     text-transform: uppercase;
 }
 
-.m-dir {
-    margin-right: 100px;
-}
-
 tr {
     font-size: small;
 }
+
+.teclado {
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media only screen and (min-width: 1400px){
+    .m-ajust {
+        margin-right: 22px;
+    }
+}
+
+@media only screen and (min-width: 3000px){
+    .m-ajust {
+        margin-right: 70px;
+    }
+}
+
