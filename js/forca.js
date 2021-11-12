@@ -55,7 +55,7 @@ for (let i = 0; i < btnTeclados.length; i++) {
 
 const gerarPlacar = () => {
     placarJogo.innerHTML = ''
-    var top5 = placar.getTop5Placar()
+    let top5 = placar.getTop5Placar()
     for (let i of top5) {
         let tr = document.createElement('tr');
         tr.setAttribute('id', i);
