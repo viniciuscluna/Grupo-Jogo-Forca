@@ -25,20 +25,35 @@ tr {
     align-items: center;
 }
 
+hr {
+    opacity: 1;
+}
+
 footer {
     position: static;
     bottom: 0;
 }
 
+@media only screen and (min-width: 1300px){
+    .m-ajust {
+        margin-right: 45px;
+    }
+}
+
 @media only screen and (min-width: 1400px){
     .m-ajust {
-        margin-right: 22px;
+        margin-right: 45px;
     }
 }
 
-@media only screen and (min-width: 3000px){
+@media only screen and (min-width: 1400px){
     .m-ajust {
-        margin-right: 70px;
+        margin-right: 55px;
     }
 }
 
+@media only screen and (min-width: 1800px){
+    .m-ajust {
+        margin-right: 60px;
+    }
+}
